@@ -1,12 +1,13 @@
 import requests
-from typing import Optional, Dict, Any
+from models.game import Game
 
 class SteamGameService:
     def __init__(self):
         self.base_url = "https://store.steampowered.com/api/appdetails"
         self.language = "english"
+        self.app_list_url = "https://api.steampowered.com/ISteamApps/GetAppList/v2/"
 
-    def get_game_details_by_appid(self, appid :int) -> Optional[Dict[str, Any]]:
+    def get_game_details_by_appid(self, appid :int) -> Game | None:
         """
         Gets the game details from the Steam API.
 
@@ -23,17 +24,8 @@ class SteamGameService:
             data = response.json()
 
             if data and str(appid) in data and data[str(appid)]["success"]:
-                
                 game_data = data[str(appid)]["data"]
-                game_details = {
-                    "game_name": game_data.get("name"),
-                    "game_description": game_data.get("short_description"),
-                    "game_genre": game_data.get("genres")[0].get("description") if game_data.get("genres") else None,
-                    "game_age_rating": game_data.get("required_age"),
-                    "game_developer": game_data.get("developers")[0] if game_data.get("developers") else None,
-                }
-
-                return game_details
+                return Game.from_dict(game_data)
             else:
                 print(f"No data found for appid: {appid}.")
                 return None
@@ -41,11 +33,28 @@ class SteamGameService:
             print(f"Error making request: {e}")
             return None
 
-# Ejemplo de uso
-if __name__ == "__main__":
-    steam_service = SteamGameService()
-    appid = 1245620
-    game_details = steam_service.get_game_details_by_appid(appid)
-    if game_details:
-        # print(game_details)
-        print(game_details)
+    def get_game_details_by_name(self, game_name: str) -> Game | None:
+        """
+        Gets game details from the Steam API by game name.
+
+        :param game_name: Name of the game to search for.
+        :return: Game instance with specific game details or None if no game is found.
+        """
+        try:
+            # Step 1: Fetch the list of all apps
+            response = requests.get(self.app_list_url)
+            response.raise_for_status()
+            app_list_data = response.json()
+
+            # Step 2: Search for the game by name
+            for app in app_list_data["applist"]["apps"]:
+                if app["name"].lower() == game_name.lower():
+                    appid = app["appid"]
+                    return self.get_game_details_by_appid(appid)
+
+            print(f"No game found with name '{game_name}'.")
+            return None
+        except requests.RequestException as e:
+            print(f"Error fetching app list: {e}")
+            return None
+
