@@ -9,7 +9,7 @@ class SteamGameService:
 
     def get_game_details_by_appid(self, appid :int) -> Game | None:
         """
-        Gets the game details from the Steam API.
+        Gets the game details from the Steam API by game ID.
 
         param appid: ID of the game to get the details from.
         return: Dictionary with the game details or None if an error is thrown.
@@ -37,8 +37,8 @@ class SteamGameService:
         """
         Gets game details from the Steam API by game name.
 
-        :param game_name: Name of the game to search for.
-        :return: Game instance with specific game details or None if no game is found.
+        param game_name: Name of the game to search for.
+        return: Game instance with specific game details or None if no game is found.
         """
         try:
             # Step 1: Fetch the list of all apps
