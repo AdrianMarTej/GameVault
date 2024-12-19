@@ -9,7 +9,7 @@ if __name__ == "__main__":
         print(game)
     
     steam_service = SteamGameService()
-    game_name = "Cyberpunk 2077"
+    game_name = "Elden Ring"
     game = steam_service.get_game_details_by_name(game_name)
     
     # Display game details if found
