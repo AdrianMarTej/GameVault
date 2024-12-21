@@ -15,9 +15,6 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav w-100 justify-content-between">
         <li class="nav-item">
-          <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
-        </li>
-        <li class="nav-item">
           <a class="nav-link" routerLink="/catalog" routerLinkActive="active">Catalog</a>
         </li>
         <li class="nav-item">
