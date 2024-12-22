@@ -1,5 +1,8 @@
 import requests
 from models.game import Game
+from config.config import Config
+
+config = Config()
 
 class SteamGameService:
     def __init__(self):
@@ -27,10 +30,10 @@ class SteamGameService:
                 game_data = data[str(appid)]["data"]
                 return Game.from_dict(game_data)
             else:
-                print(f"No data found for appid: {appid}.")
+                config.logger.info(f"No data found for appid: {appid}.")
                 return None
         except requests.RequestException as e:
-            print(f"Error making request: {e}")
+            config.logger.error(f"Error making request: {e}")
             return None
 
     def get_game_details_by_name(self, game_name: str) -> Game | None:
@@ -40,6 +43,9 @@ class SteamGameService:
         param game_name: Name of the game to search for.
         return: Game instance with specific game details or None if no game is found.
         """
+        
+        config.logger.debug(f"Fetching game details for game: {game_name}")
+        
         try:
             # Step 1: Fetch the list of all apps
             response = requests.get(self.app_list_url)
@@ -52,9 +58,9 @@ class SteamGameService:
                     appid = app["appid"]
                     return self.get_game_details_by_appid(appid)
 
-            print(f"No game found with name '{game_name}'.")
+            config.logger.info(f"No game found with name '{game_name}'.")
             return None
         except requests.RequestException as e:
-            print(f"Error fetching app list: {e}")
+            config.logger.error(f"Error fetching app list: {e}")
             return None
 
