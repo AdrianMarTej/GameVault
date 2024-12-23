@@ -1,0 +1,45 @@
+name: gamevault
+
+services:
+
+  steam-games-api:
+    restart: unless-stopped
+    container_name: steam-games-api
+    image: steam-games-api:0.1
+    build: ./steam-games-api
+    ports:
+      - "8000:8000"
+    environment:
+      - GAMES_PORT=8000
+    networks:
+      - app-network
+
+  mongo-api:
+    build: ./mongo-api
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongodb
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017/gamevault
+      - PORT=3000
+    networks:
+      - app-network
+
+  mongodb:
+    image: mongo:5
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - app-network
+
+volumes:
+  mongo_data:
+
+networks:
+  app-network:
+    name: app-network
+    driver: bridge
+
