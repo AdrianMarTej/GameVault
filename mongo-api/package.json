@@ -1,0 +1,16 @@
+{
+  "name": "mongo-api",
+  "version": "1.0.0",
+  "description": "MongoDB API for GameVault",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "axios": "^1.7.9",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.12.3"
+  }
+}
