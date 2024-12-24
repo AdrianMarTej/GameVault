@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 
+// Base url: http://localhost:3000/api/games/
+
 // Get all users
 router.get('/', async (req, res) => {
   try {
