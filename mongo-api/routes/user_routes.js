@@ -37,7 +37,7 @@ router.post('/', async (req, res) => {
 
 // Add game to favorites
 router.post('/:id/favorites', getUser, async (req, res) => {
-  const gameId = req.body.gameId;
+  const gameId = req.body.id;
   if (!res.user.favorites.includes(gameId)) {
     res.user.favorites.push(gameId);
     try {
