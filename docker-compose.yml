@@ -2,15 +2,33 @@ name: gamevault
 
 services:
 
-  steam-games-api:
+  api-gateway:
     restart: unless-stopped
-    container_name: steam-games-api
-    image: steam-games-api:0.1
-    build: ./steam-games-api
+    container_name: api-gateway
+    build: ./api-gateway
     ports:
-      - "8000:8000"
+      - "5000:5000"
+    depends_on:
+      - auth-service
+      - mongo-api
+      - steam-games-api
+    networks:
+      - app-network
+
+  auth-service:
+    restart: unless-stopped
+    container_name: auth-service
+    build: ./auth-service
+    ports:
+      - "4000:4000"
+    depends_on:
+      - mongodb
     environment:
-      - GAMES_PORT=8000
+      - MONGODB_URI=mongodb://mongodb:27017/gamevault
+      - PORT=4000
+      - JWT_SECRET=${JWT_SECRET}
+    env_file:
+      - .env
     networks:
       - app-network
 
@@ -28,18 +46,15 @@ services:
     networks:
       - app-network
 
-  auth-service:
+  steam-games-api:
     restart: unless-stopped
-    container_name: auth-service
-    build: ./auth-service
+    container_name: steam-games-api
+    image: steam-games-api:0.1
+    build: ./steam-games-api
     ports:
-      - "4000:4000"
-    depends_on:
-      - mongodb
+      - "8000:8000"
     environment:
-      - MONGODB_URI=mongodb://mongodb:27017/gamevault
-      - PORT=4000
-      - JWT_SECRET=${JWT_SECRET}
+      - GAMES_PORT=8000
     networks:
       - app-network
 
