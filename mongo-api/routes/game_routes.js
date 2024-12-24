@@ -68,7 +68,7 @@ router.patch('/:id', getGame, async (req, res) => {
 router.delete('/:id', getGame, async (req, res) => {
   try {
     await res.game.remove();
-    res.json({ message: 'Game deleted' });
+    res.json({ message: 'Game with id ' + req.params.id + ' deleted' });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -80,7 +80,7 @@ async function getGame(req, res, next) {
   try {
     game = await Game.findOne({ id: req.params.id });
     if (game == null) {
-      return res.status(404).json({ message: 'Cannot find game' });
+      return res.status(404).json({ message: 'Cannot find game with id ' + req.params.id });
     }
   } catch (err) {
     return res.status(500).json({ message: err.message });
