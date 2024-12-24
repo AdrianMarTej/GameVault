@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
+const Game = require('../models/Game');
 
 // Base url: http://localhost:3000/api/users/
 
@@ -35,19 +36,30 @@ router.post('/', async (req, res) => {
   }
 });
 
+async function gameExists(gameId) {
+  const game = await Game.findOne({ id: gameId });
+  return game !== null;
+}
+
 // Add game to favorites
 router.post('/:id/favorites', getUser, async (req, res) => {
   const gameId = req.body.id;
-  if (!res.user.favorites.includes(gameId)) {
-    res.user.favorites.push(gameId);
-    try {
+  
+  try {
+    const exists = await gameExists(gameId);
+    if (!exists) {
+      return res.status(404).json({ message: 'Game with id ' + gameId + ' not found' });
+    }
+
+    if (!res.user.favorites.includes(gameId)) {
+      res.user.favorites.push(gameId);
       const updatedUser = await res.user.save();
       res.json(updatedUser);
-    } catch (err) {
-      res.status(400).json({ message: err.message });
+    } else {
+      res.json(res.user);
     }
-  } else {
-    res.json(res.user);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
   }
 });
 
@@ -55,7 +67,7 @@ router.post('/:id/favorites', getUser, async (req, res) => {
 router.delete('/:id', getUser, async (req, res) => {
   try {
     await res.user.remove();
-    res.json({ message: 'User deleted' });
+    res.json({ message: 'User with id ' + req.params.id + ' deleted' });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -67,7 +79,7 @@ async function getUser(req, res, next) {
   try {
     user = await User.findById(req.params.id);
     if (user == null) {
-      return res.status(404).json({ message: 'Cannot find user' });
+      return res.status(404).json({ message: 'Cannot find user with id ' + req.params.id });
     }
   } catch (err) {
     return res.status(500).json({ message: err.message });
