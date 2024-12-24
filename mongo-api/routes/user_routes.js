@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 
-// Base url: http://localhost:3000/api/games/
+// Base url: http://localhost:3000/api/users/
 
 // Get all users
 router.get('/', async (req, res) => {
@@ -48,6 +48,16 @@ router.post('/:id/favorites', getUser, async (req, res) => {
     }
   } else {
     res.json(res.user);
+  }
+});
+
+// Delete one user
+router.delete('/:id', getUser, async (req, res) => {
+  try {
+    await res.user.remove();
+    res.json({ message: 'User deleted' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 });
 
