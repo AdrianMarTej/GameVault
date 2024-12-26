@@ -1,16 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { API_URL } from '../app.config';
 
-export interface Game {
-  id: number;
-  name: string;
-  description: string;
-  genre: string;
-  age_rating: number;
-  developer: string;
-}
 
 @Injectable({
   providedIn: 'root'
@@ -20,16 +12,33 @@ export class GameService {
 
   constructor(private http: HttpClient) { }
 
-  getGameByAppId(appId: number): Observable<Game> {
-    return this.http.get<Game>(`${this.apiUrl}/games/${appId}`);
+  public getGameByAppId(appId: number): Observable<any> {
+    const data = { };
+    const headers = new HttpHeaders({ 'content-type': 'application/json' });
+
+    return this.http.get<any>(`${this.apiUrl}/users/${appId}`);
   }
 
-  getGameByName(name: string): Observable<Game> {
-    return this.http.get<Game>(`${this.apiUrl}/games`, { params: { name } });
+  public getAllGames(): Observable<any> {
+    const data = { };
+    const headers = new HttpHeaders({ 'content-type': 'application/json' });
+
+    return this.http.get<any>(`${this.apiUrl}/games/`);
   }
 
-  searchGames(query: string): Observable<Game[]> {
-    return this.http.get<Game[]>(`${this.apiUrl}/games/search`, { params: { query } });
+  public createGame(idText: number, nameText: string, descriptionText: string, genreText: string, age_ratingText: number, developerText: string): Observable<any> {
+    const data = { id: idText, name : nameText, description: descriptionText, genre: genreText, age_rating: age_ratingText, developer: developerText };
+    const headers = new HttpHeaders({ 'content-type': 'application/json' });
+
+    return this.http.post<any>(`${this.apiUrl}/games/`, data, { headers });
   }
+
+  public deleteGameByAppId(idText: number): Observable<number> {
+    const data = { };
+    const headers = new HttpHeaders({ 'content-type': 'application/json' });
+
+    return this.http.delete<any>(`${this.apiUrl}/games/${idText}`);
+  }
+
 }
 
