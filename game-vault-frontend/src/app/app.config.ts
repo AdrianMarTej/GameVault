@@ -10,5 +10,5 @@ export const appConfig: ApplicationConfig = {
   ]
 };
 
-export const API_URL = 'http://localhost:8000/api';  // Adjust this URL to match your backend API
+export const API_URL = 'http://localhost:5000/api';
 
