@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import { MainComponent } from './main/main.component';
-import { CatalogComponent } from './catalog/catalog.component';
-import { LibraryComponent } from './library/library.component';
-import { RegisterComponent } from './register/register.component';
-import { LoginComponent } from './login/login.component';
+import { MainComponent } from './components/main/main.component';
+import { CatalogComponent } from './components/catalog/catalog.component';
+import { LibraryComponent } from './components/library/library.component';
+import { RegisterComponent } from './components/register/register.component';
+import { LoginComponent } from './components/login/login.component';
 
 export const routes: Routes = [
   { path: '', component: MainComponent },
