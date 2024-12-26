@@ -13,4 +13,6 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     </div>
   `,
 })
-export class AppComponent { }
+export class AppComponent {
+  title = 'game-vault-frontend';
+}
