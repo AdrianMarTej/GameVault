@@ -1,25 +1,49 @@
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { UserService } from '../../services/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  template: `
-    <div class="row justify-content-center">
-      <div class="col-md-6">
-        <h2 class="text-center mb-4">Login</h2>
-        <form>
-          <div class="mb-3">
-            <label for="username" class="form-label">Username</label>
-            <input type="text" class="form-control" id="username" required>
-          </div>
-          <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" id="password" required>
-          </div>
-          <button type="submit" class="btn btn-primary w-100">Login</button>
-        </form>
-      </div>
-    </div>
-  `,
+  imports: [FormsModule, CommonModule],
+  templateUrl: './login.component.html',
 })
-export class LoginComponent { }
+export class LoginComponent {
+  email: string = '';
+  password: string = '';
+  errorMessage: string = '';
+
+  constructor(
+    private userService: UserService,
+    private router: Router
+  ) {}
+
+  onSubmit() {
+    if (this.isFormValid()) {
+      this.userService.login(this.email, this.password).subscribe({
+        next: (response) => {
+          console.log('Login successful', response);
+          if (response && response.user && response.user.id) {
+            this.userService.setLoggedUserId(response.user.id);
+            this.router.navigate(['/catalog']); // Redirect to catalog page after successful login
+          } else {
+            this.errorMessage = 'Invalid response from server';
+          }
+        },
+        error: (error) => {
+          console.error('Login failed', error);
+          this.errorMessage = 'Login failed. Please check your credentials and try again.';
+        }
+      });
+    } else {
+      this.errorMessage = 'Please enter both email and password.';
+    }
+  }
+
+  isFormValid(): boolean {
+    return this.email.trim() !== '' && this.password.trim() !== '';
+  }
+}
+
