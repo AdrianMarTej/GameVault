@@ -58,7 +58,7 @@ export class RegisterComponent {
           console.log('Registration successful', response);
           this.successMessage = 'Registration successful! You can now log in.';
           this.errorMessage = '';
-          this.router.navigate(['/login']);
+          this.router.navigate(['/']);
           // Reset form fields
           this.username = '';
           this.email = '';

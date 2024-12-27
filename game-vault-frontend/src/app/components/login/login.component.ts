@@ -1,16 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../services/user.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, RouterLink],
   templateUrl: './login.component.html',
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   email: string = '';
   password: string = '';
   errorMessage: string = '';
@@ -20,6 +20,11 @@ export class LoginComponent {
     private router: Router
   ) {}
 
+  ngOnInit() {
+    this.userService.setLoggedUserId('NA');
+  }
+  
+
   onSubmit() {
     if (this.isFormValid()) {
       this.userService.login(this.email, this.password).subscribe({
@@ -27,7 +32,7 @@ export class LoginComponent {
           console.log('Login successful', response);
           if (response && response.user && response.user.id) {
             this.userService.setLoggedUserId(response.user.id);
-            this.router.navigate(['/catalog']); // Redirect to catalog page after successful login
+            this.router.navigate(['/catalog']);
           } else {
             this.errorMessage = 'Invalid response from server';
           }
