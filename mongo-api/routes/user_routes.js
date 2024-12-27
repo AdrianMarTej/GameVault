@@ -88,6 +88,15 @@ router.delete('/:id/favorites', getUser, async (req, res) => {
   }
 });
 
+// Get user's favorite games
+router.get('/:id/favorites', getUser, async (req, res) => {
+  try {
+    const favorites = await Game.find({ id: { $in: res.user.favorites } });
+    res.json(favorites);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
 // Delete one user
 router.delete('/:id', getUser, async (req, res) => {
