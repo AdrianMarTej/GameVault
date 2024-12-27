@@ -97,7 +97,6 @@ export class LibraryComponent implements OnInit {
       }),
       catchError(error => {
         console.error('Error deleting game:', error);
-        // Here you might want to add some user feedback, like a toast notification
         return [];
       })
     ).subscribe();

@@ -47,10 +47,3 @@ class SteamService:
         
 
         return 
-        
-
-# Example usage:
-# api_key = 'YOUR_STEAM_API_KEY'
-# steam_wrapper = SteamWrapper(api_key)
-# owned_games = steam_wrapper.get_owned_games('STEAM_ID')
-# print(owned_games)
