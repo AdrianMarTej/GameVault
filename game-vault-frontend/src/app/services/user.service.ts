@@ -40,11 +40,25 @@ export class UserService {
         return this.http.post<any>(`${this.apiUrl}/auth/login`, data, { headers });
     }
 
-    public addFavoriteGame(userIdText: string, gameId: number): Observable<any> {
-        const data = { id: gameId };
+    public addFavoriteGame(userIdText: string, gameIdText: number): Observable<any> {
+        const data = { id: gameIdText };
         const headers = new HttpHeaders({ 'content-type': 'application/json' });
 
         return this.http.post<any>(`${this.apiUrl}/users/${this.loggedUserId}/favorites`, data, { headers });
+    }
+
+    public deleteFavoriteGame(userIdText: string, gameIdText: number): Observable<any> {
+        const data = { id: gameIdText };
+        const headers = new HttpHeaders({ 'content-type': 'application/json' });
+
+        return this.http.delete<any>(`${this.apiUrl}/users/${this.loggedUserId}/favorites`, { headers, body: data });
+    }
+
+    public getFavorites(userIdText: string): Observable<any> {
+        const data = { };
+        const headers = new HttpHeaders({ 'content-type': 'application/json' });
+
+        return this.http.get<any>(`${this.apiUrl}/users/${this.loggedUserId}/favorites`);
     }
 
     public setLoggedUserId(id: string) {
