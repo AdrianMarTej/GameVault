@@ -22,13 +22,13 @@ import { catchError, tap } from 'rxjs/operators';
                 <p><strong>Genre:</strong> {{ game.genre }}</p>
                 <p><strong>Age Rating:</strong> {{ game.age_rating }}</p>
                 <p><strong>Developer:</strong> {{ game.developer }}</p>
-                <button class="btn btn-danger mt-2" (click)="deleteGame(game.id)">Remove from Favorites</button>
+                <button class="btn btn-danger mt-2" (click)="deleteGame(game.id)">Remove from your Library</button>
               </div>
             </div>
           </div>
         </div>
         <ng-template #noGames>
-          <p class="text-center">You haven't added any games to your favorites yet.</p>
+          <p class="text-center">You haven't added any games to your library yet.</p>
         </ng-template>
       </ng-container>
       <ng-template #loading>
@@ -66,7 +66,7 @@ export class LibraryComponent implements OnInit {
         }
       }),
       catchError(error => {
-        console.error('Error fetching favorite games:', error);
+        console.error('Error fetching library games:', error);
         return [];
       })
     );

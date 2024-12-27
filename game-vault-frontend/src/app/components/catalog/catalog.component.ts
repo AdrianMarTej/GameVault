@@ -25,7 +25,7 @@ import { UserService } from '../../services/user.service';
             <p><strong>Genre:</strong> {{ game.genre }}</p>
             <p><strong>Age Rating:</strong> {{ game.age_rating }}</p>
             <p><strong>Developer:</strong> {{ game.developer }}</p>
-            <button class="btn btn-primary" (click)="this.addFavoriteGame(game.id) ">Add to Favorites</button>
+            <button class="btn btn-primary" (click)="this.addFavoriteGame(game.id) ">Add to your Library</button>
           </div>
         </div>
       </div>
@@ -77,17 +77,17 @@ export class CatalogComponent implements OnInit {
   addFavoriteGame(gameId: number) {
     if (this.loggedUserId == 'NA') {
       console.error('User not logged in');
-      alert('Please log in to add games to favorites');
+      alert('Please log in to add games to your library');
       return;
     }
     this.userService.addFavoriteGame(this.loggedUserId, gameId).subscribe({
       next: (data: any) => {
-        console.log('Game added to favorites:', data);
-        alert('Game added to favorites');
+        console.log('Game added to library:', data);
+        alert('Game added to your library');
       },
       error: (error: any) => {
-        console.error('Error adding game to favorites:', error);
-        alert('Error adding game to favorites');
+        console.error('Error adding game to library:', error);
+        alert('Error adding game to library');
       }
     });
   }
