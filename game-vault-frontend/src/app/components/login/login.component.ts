@@ -22,6 +22,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.userService.setLoggedUserId('NA');
+    this.userService.setLoggedUserUsername('NA');
   }
   
 
@@ -32,6 +33,7 @@ export class LoginComponent implements OnInit {
           console.log('Login successful', response);
           if (response && response.user && response.user.id) {
             this.userService.setLoggedUserId(response.user.id);
+            this.userService.setLoggedUserUsername(response.user.username);
             this.router.navigate(['/catalog']);
           } else {
             this.errorMessage = 'Invalid response from server';

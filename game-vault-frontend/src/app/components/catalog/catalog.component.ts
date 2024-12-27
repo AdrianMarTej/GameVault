@@ -12,7 +12,7 @@ import { UserService } from '../../services/user.service';
   imports: [CommonModule, FormsModule],
   template: `
     <h2 class="text-center mb-4">Game Catalog</h2>
-    <h5>your id: {{ this.loggedUserId }}</h5> <!-- Debugging purposes -->
+    <h5 class="text-center mb-4">{{ this.loggedUserUsername === 'NA' ? 'Please log in to add games to your library.' : 'Logged in as: ' + this.loggedUserUsername }}</h5>
     <div class="mb-3">
       <input type="text" class="form-control" placeholder="Search for a game..." [(ngModel)]="searchQuery" (ngModelChange)="searchGames()">
     </div>
@@ -36,6 +36,7 @@ export class CatalogComponent implements OnInit {
   games: WritableSignal<Game[]> = signal<Game[]>([]);
   searchQuery: string = '';
   loggedUserId: string = '';
+  loggedUserUsername: string = '';
 
   constructor(private gameService: GameService, private userService: UserService) {}
 
@@ -47,6 +48,14 @@ export class CatalogComponent implements OnInit {
       },
       error: (error: any) => {
         console.error('Error fetching logged user ID:', error);
+      }
+    });
+    this.userService.getLoggedUserUsername().subscribe({
+      next: (username: string) => {
+        this.loggedUserUsername = username;
+      },
+      error: (error: any) => {
+        console.error('Error fetching logged user username:', error);
       }
     });
   }

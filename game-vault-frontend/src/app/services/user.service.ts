@@ -9,6 +9,7 @@ import { API_URL } from '../app.config';
 export class UserService {
     private apiUrl = API_URL;
     private loggedUserId: string = 'NA';
+    private loggedUserUsername: string = 'NA';
 
     constructor(private http: HttpClient) { }
 
@@ -69,6 +70,18 @@ export class UserService {
     public getLoggedUserId(): Observable<string> {
         return new Observable<string>((observer) => {
             observer.next(this.loggedUserId);
+            observer.complete();
+        });
+    }
+
+    public setLoggedUserUsername(username: string) {
+        this.loggedUserUsername = username;
+        console.log(this.loggedUserUsername);
+    }
+
+    public getLoggedUserUsername(): Observable<string> {
+        return new Observable<string>((observer) => {
+            observer.next(this.loggedUserUsername);
             observer.complete();
         });
     }

@@ -28,6 +28,7 @@ import { catchError, tap } from 'rxjs/operators';
           </div>
         </div>
         <ng-template #noGames>
+          <h5 class="text-center mb-4">Logged in as: {{ this.loggedUserUsername }}</h5>
           <p class="text-center">You haven't added any games to your library yet.</p>
         </ng-template>
       </ng-container>
@@ -48,6 +49,7 @@ import { catchError, tap } from 'rxjs/operators';
   `]
 })
 export class LibraryComponent implements OnInit {
+  loggedUserUsername: string = '';
   private refreshTrigger = new BehaviorSubject<void>(undefined);
   favoriteGames$: Observable<Game[]>;
 
@@ -65,11 +67,20 @@ export class LibraryComponent implements OnInit {
           return this.userService.getFavorites(userId);
         }
       }),
+      
       catchError(error => {
         console.error('Error fetching library games:', error);
         return [];
       })
     );
+    this.userService.getLoggedUserUsername().subscribe({
+      next: (username: string) => {
+        this.loggedUserUsername = username;
+      },
+      error: (error: any) => {
+        console.error('Error fetching logged user username:', error);
+      }
+    });
   }
 
   deleteGame(gameId: number) {
