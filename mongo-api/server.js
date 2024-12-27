@@ -4,10 +4,12 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const Game = require('./models/Game'); 
 const axios = require('axios');
+const { GAMES_LIST } = require('./config/config');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/gamevault';
+
 
 app.use(cors());
 app.use(express.json());
@@ -24,11 +26,7 @@ async function seedInitialData() {
     const gameCount = await Game.countDocuments();
     if (gameCount === 0) { 
       // List of App IDs
-      const appIds = [
-        '1245620', // Elden Ring
-        '730',     // Counter-Strike 2
-        
-      ];
+      const appIds = GAMES_LIST;
 
       const initialGames = [];
       for (const appId of appIds) {
