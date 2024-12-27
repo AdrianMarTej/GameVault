@@ -63,6 +63,32 @@ router.post('/:id/favorites', getUser, async (req, res) => {
   }
 });
 
+// Remove game from favorites
+router.delete('/:id/favorites', getUser, async (req, res) => {
+  const gameId = req.body.id;
+
+  try {
+    const exists = await gameExists(gameId);
+    if (!exists) {
+      return res.status(404).json({ message: 'Game with id ' + gameId + ' not found' });
+    }
+
+    // Check if the game is in the user's favorites list
+    if (!res.user.favorites.includes(gameId)) {
+      return res.status(404).json({ message: 'Game with id ' + gameId + ' is not in the favorites list' });
+    }
+
+    // Remove the game from the favorites list
+    res.user.favorites = res.user.favorites.filter(id => id !== gameId);
+    const updatedUser = await res.user.save();
+    res.json(updatedUser);
+
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+
 // Delete one user
 router.delete('/:id', getUser, async (req, res) => {
   try {
