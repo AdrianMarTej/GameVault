@@ -63,8 +63,7 @@ export class UserService {
     }
 
     public setLoggedUserId(id: string) {
-        this.loggedUserId = id;
-        console.log(this.loggedUserId);        
+        this.loggedUserId = id;        
     }
 
     public getLoggedUserId(): Observable<string> {
@@ -76,7 +75,6 @@ export class UserService {
 
     public setLoggedUserUsername(username: string) {
         this.loggedUserUsername = username;
-        console.log(this.loggedUserUsername);
     }
 
     public getLoggedUserUsername(): Observable<string> {

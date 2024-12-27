@@ -5,6 +5,7 @@ services:
   api-gateway:
     restart: unless-stopped
     container_name: api-gateway
+    image: api-gateway:0.1
     build: ./api-gateway
     ports:
       - "5000:5000"
@@ -18,6 +19,7 @@ services:
   auth-service:
     restart: unless-stopped
     container_name: auth-service
+    image: auth-service:0.1
     build: ./auth-service
     ports:
       - "4000:4000"
@@ -66,6 +68,17 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
+    networks:
+      - app-network
+  
+  game-vault-frontend:
+    restart: unless-stopped
+    container_name: game-vault-frontend
+    build: ./game-vault-frontend
+    ports:
+      - "4200:4200"
+    depends_on:
+      - api-gateway
     networks:
       - app-network
 
