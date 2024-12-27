@@ -66,8 +66,11 @@ export class UserService {
         console.log(this.loggedUserId);        
     }
 
-    public getLoggedUserId(): string {
-        return this.loggedUserId;
+    public getLoggedUserId(): Observable<string> {
+        return new Observable<string>((observer) => {
+            observer.next(this.loggedUserId);
+            observer.complete();
+        });
     }
 
 }

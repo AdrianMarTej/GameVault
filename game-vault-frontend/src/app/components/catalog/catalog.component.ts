@@ -11,7 +11,7 @@ import { UserService } from '../../services/user.service';
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <h2>Game Catalog</h2>
+    <h2 class="text-center mb-4">Game Catalog</h2>
     <h5>your id: {{ this.loggedUserId }}</h5> <!-- Debugging purposes -->
     <div class="mb-3">
       <input type="text" class="form-control" placeholder="Search for a game..." [(ngModel)]="searchQuery" (ngModelChange)="searchGames()">
@@ -41,7 +41,14 @@ export class CatalogComponent implements OnInit {
 
   ngOnInit() {
     this.getAllGames();
-    this.loggedUserId = this.userService.getLoggedUserId();
+    this.userService.getLoggedUserId().subscribe({
+      next: (id: string) => {
+        this.loggedUserId = id;
+      },
+      error: (error: any) => {
+        console.error('Error fetching logged user ID:', error);
+      }
+    });
   }
 
   getAllGames() {

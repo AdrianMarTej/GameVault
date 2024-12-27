@@ -47,7 +47,9 @@ export class NavbarComponent implements OnInit {
   }
   
   private updateLoggedUserId(): void {
-    this.loggedUserId = this.userService.getLoggedUserId();
+    this.userService.getLoggedUserId().subscribe((id: string) => {
+      this.loggedUserId = id;
+    });
   }
 
 }
